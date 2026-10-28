@@ -26,22 +26,30 @@ const customerSchema = new mongoose.Schema({
 const Order = mongoose.model("Order", orderSchema);
 const Customer = mongoose.model("Customer", customerSchema);
 
-const addCustomer = async () => {
-    let cust1 = new Customer({
-        name: "Bob",
-    });
 
-    let order1 = await Order.findOne({item: "Samosa"});
-    let order2 = await Order.findOne({item: "Pizza"});
-
-    cust1.orders.push(order1);
-    cust1.orders.push(order2);
-
-    let result = await cust1.save();
-
-    console.log(result);
+//Using Populate to get the data of orders in customer collection not just the id of orders.
+const findCustomer = async () => {
+    let resultt = await Customer.findOne({}).populate("orders");
+    console.log(resultt);
 }
-addCustomer();
+findCustomer();
+
+// const addCustomer = async () => {
+//     let cust1 = new Customer({
+//         name: "Bob",
+//     });
+
+//     let order1 = await Order.findOne({item: "Samosa"});
+//     let order2 = await Order.findOne({item: "Pizza"});
+
+//     cust1.orders.push(order1);
+//     cust1.orders.push(order2);
+
+//     let result = await cust1.save();
+
+//     console.log(result);
+// }
+// addCustomer();
 
 // const addOrders = async () => {
 //     let res = await Order.insertMany([
