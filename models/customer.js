@@ -34,6 +34,16 @@ const findCustomer = async () => {
 }
 findCustomer();
 
+customerSchema.post = ("findOneAndDelete", async (customer) => {
+    if(customer.orders.length) {
+        await Order.deleteMany({
+            _id: {
+                $in: customer.orders
+            }
+        });
+    }
+});
+
 // const addCustomer = async () => {
 //     let cust1 = new Customer({
 //         name: "Bob",
@@ -61,3 +71,29 @@ findCustomer();
 // }
 
 // addOrders();
+
+const addCust = async () => {
+    let newCust = new Customer({
+        name: "Alice",
+    });
+
+    let newOrder = new Order({
+        item: "Pasta",
+        price: 80,
+    })
+
+    newCust.orders.push(newOrder);
+
+    await newCust.save();
+    await newOrder.save();
+
+    console.log("Customer and Order added successfully");  
+}
+
+// addCust();
+
+const delCust = async () => {
+    let data = await Customer.findByIdAndDelete('6ae2ddc889cf7739e1c3e366');
+    console.log(data);
+}
+delCust();
